@@ -1,0 +1,29 @@
+[project]
+name = "event-finance-frame"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "20070316lbw-netizen", email = "244884540+20070316lbw-netizen@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=2.0.0",
+    "loguru>=0.8.0",
+    "numpy>=2.5.5",
+    "pandas>=3.1.1",
+    "yfinance>=1.8.0",
+]
+
+[project.scripts]
+event-finance-frame = "event_finance_frame:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]

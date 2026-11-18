@@ -1,0 +1,3 @@
+CREATE OR REPLACE VIEW calendar AS
+SELECT DISTINCT date
+FROM prices;
