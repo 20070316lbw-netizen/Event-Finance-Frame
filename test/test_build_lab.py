@@ -287,6 +287,18 @@ def test_build_lab_segments_adjustments_and_universe(tmp_path: Path):
         ).fetchall()
         assert pc_closed == [("2020-01-04", "Sat", False, None)]
 
+        # 收益率表宏随 build_lab 注册, 且 pit_* 宏只返回 as_of_date 之前的行
+        macros = {
+            row[0]
+            for row in conn.execute(
+                "SELECT function_name FROM duckdb_functions() WHERE function_type = 'table_macro'"
+            ).fetchall()
+        }
+        assert {"pit_historical_return", "pit_log_return", "label_forward_return"} <= macros
+        assert conn.execute(
+            "SELECT max(date)::VARCHAR FROM pit_historical_return(DATE '2020-01-06', n_periods := 1)"
+        ).fetchone() == ("2020-01-06",)
+
         # 5. universe 映射
         univ = conn.execute(
             """

@@ -30,6 +30,8 @@
 | 视图 | `calendar` | 全部有效开盘交易日 |
 | 视图 | `prices_calendar` | `market_calendar` 与 `prices` 联结视图 |
 | 表宏 | `pit_fundamentals` / `pit_fundamentals_by_ticker` | 全体 / 单标的 PIT 财报查询宏 |
+| 表宏 | `pit_historical_return` / `pit_log_return` | 截至 `as_of_date` 的历史简单收益率 / 对数收益率（可作特征） |
+| 表宏 | `label_forward_return` | 未来持有期收益率，**仅用作机器学习标签，回测引擎禁止调用** |
 
 ## 快速开始
 

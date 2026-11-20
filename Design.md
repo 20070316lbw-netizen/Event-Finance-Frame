@@ -25,6 +25,16 @@
 
 `fy`, `fp`, `frame` 只作为原始辅助信息保留, 不用来替代实际报告日期
 
+收益率表宏 (`db/macro/returns.sql`) 同样遵守上面的规则:
+
+| 表宏 | 用途 | 时点约束 |
+|---|---|---|
+| `pit_historical_return(as_of_date, n_periods := 5, price_col := 'adj_close')` | 历史简单收益率, 特征 | 先过滤 `date <= as_of_date` 再开窗 |
+| `pit_log_return(as_of_date, price_col := 'adj_close')` | 相邻记录对数收益率, 特征 | 先过滤 `date <= as_of_date` 再开窗 |
+| `label_forward_return(n_periods := 5, gap := 1, price_col := 'adj_close')` | 未来持有期收益率, **监督学习标签** | 使用未来数据, **PIT DataView 与回测引擎禁止调用**; 输出 `exit_date` 供交叉验证 purging / embargo 使用 |
+
+命名约定: `pit_` 前缀的宏可以安全地在任意时刻 T 调用; `label_` 前缀的宏一定含未来信息
+
 ---
 
 ### 已知限制

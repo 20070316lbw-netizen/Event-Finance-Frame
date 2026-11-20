@@ -67,6 +67,7 @@ def build_lab(
             connection, csv_dir=csv_dir, gap_days=gap_days, reused_path=reused_path
         )
         n_calendar = load_calendar(connection)
+        connection.execute(read_sql(MACRO / "returns.sql"))
 
         start = connection.execute("SELECT min(date) FROM prices").fetchone()[0]
         df = build_universe_frame(sp500_dir, start=start)

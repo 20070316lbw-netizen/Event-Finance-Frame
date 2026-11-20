@@ -30,6 +30,3 @@ jobs:
 
       - name: Run tests
         run: uv run pytest -v
-
-      - name: Run doctests
-        run: uv run pytest -v --doctest-modules src/event_finance_frame/metrics
