@@ -115,11 +115,29 @@ CREATE TABLE IF NOT EXISTS fundamental_period (
 );
 ```
 ---
-交易日历 `calendar` 视图: `prices` 中至少有一条记录的日期即为交易日
+交易日历 `calendar` 视图: `prices` 中至少有一条记录的日期即为交易日 (由 `db/insert/dolt_prices_pipeline.sql` 在写入 `prices` 后创建)
 ```SQL
 CREATE OR REPLACE VIEW calendar AS
 SELECT DISTINCT date
 FROM prices;
+```
+---
+连续自然日的 `market_calendar` 市场日历表: 覆盖 `prices` 最小到最大日期的每一个自然日, `is_open` 表示当天是否为交易日 (由 `calendar.load_calendar()` 写入)
+```SQL
+CREATE TABLE IF NOT EXISTS market_calendar (
+    date DATE NOT NULL PRIMARY KEY,
+    weekday VARCHAR NOT NULL,       -- Mon .. Sun
+    is_open BOOLEAN NOT NULL
+);
+```
+---
+`prices_calendar` 视图: `market_calendar` 左联结 `prices`, 休市日保留一行且行情列为空
+```SQL
+CREATE OR REPLACE VIEW prices_calendar AS
+SELECT c.date, c.weekday, c.is_open,
+       p.ticker, p.open, p.high, p.low, p.close, p.adj_close, p.volume
+FROM market_calendar AS c
+LEFT JOIN prices AS p USING (date);
 ```
 ---
 

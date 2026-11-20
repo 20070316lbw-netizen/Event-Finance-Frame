@@ -1,7 +1,7 @@
 [project]
 name = "event-finance-frame"
 version = "0.1.0"
-description = "Add your description here"
+description = "Point-in-time daily data and backtesting framework for historical S&P 500 constituents, built on DuckDB"
 readme = "README.md"
 authors = [
     { name = "20070316lbw-netizen", email = "244884540+20070316lbw-netizen@users.noreply.github.com" }
@@ -14,9 +14,6 @@ dependencies = [
     "pandas>=3.1.1",
     "yfinance>=1.8.0",
 ]
-
-[project.scripts]
-event-finance-frame = "event_finance_frame:main"
 
 [build-system]
 requires = ["uv_build>=0.12.22,<0.13.0"]

@@ -1,4 +1,7 @@
-"""event_finance_frame.metrics.returns 下的三个函数已经全部实际测试全部跑通完毕"""
+"""用 test.duckdb 的真实 AAPL 行情目测 metrics.returns 三个函数的输出
+
+单元测试见 test/test_metrics_returns.py; 本脚本只用于人工核对真实数据
+"""
 
 from __future__ import annotations
 

@@ -6,7 +6,7 @@
     company_tickers.json  SEC 当前 ticker → CIK 映射, 用来补调出成员的 CIK
     wiki_current.csv      Wikipedia 当前成员 (cik, name, sub_industry)
 
-代码统一用点号, 例如 BRK.B, 与 raw_data.duckdb 一致
+代码统一用点号, 例如 BRK.B, 与 Dolt 行情 (prices 表) 一致
 fja 列表本身就是点号; SEC 和 yfinance 用减号, 读入时转换
 
 已知限制:
