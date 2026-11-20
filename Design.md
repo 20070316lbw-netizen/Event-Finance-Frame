@@ -30,12 +30,12 @@
 ### 已知限制
 
 - **代码复用 (诈尸) 与改名**:
-  - `raw_data.duckdb` 没有跨时间不变的证券 ID, 同一个代码在旧公司退市后可能被新公司重新使用. `sources/raw_prices.py` 按前后行情间隔超过 120 个交易日自动切段, 最新段沿用原代码, 旧段改名为 `{symbol}~{YYYYMMDD}` (名单导出至 `data/reused_tickers.csv`)
-  - 同一家公司改名 (例如 `FB` → `META`) 不会被接成一条连续序列, 改名前的历史仍保留在旧代码上
-- **免费行情质量**: `raw_ohlcv` 存在少量 OHLC 自相矛盾 (例如 `high < max(open, close)`) 和 0 价毛刺; 入库时只剔除 `close <= 0` 的行以及比例/金额 `<= 0` 的无效事件, 其余保留原样
+  - Dolt 导出的行情 CSV (`data/stocks_csv/`) 没有跨时间不变的证券 ID, 同一个代码在旧公司退市后可能被新公司重新使用. `db/insert/dolt_prices_pipeline.sql` 按前后行情间隔超过 120 个交易日自动切段, 最新段沿用原代码, 旧段改名为 `{symbol}~{YYYYMMDD}` (名单导出至 `data/reused_tickers.csv`)
+  - 同一家公司改名 (例如 `FB` → `META`) 或无空档复用代码不会被接成一条连续序列或自动切开
+- **免费行情质量**: Dolt 原始行情存在少量 OHLC 自相矛盾 (例如 `high < max(open, close)`), 0 价毛刺, 休市日零成交假数据与重复拆股记录; 入库时统一在 `dolt_prices_pipeline.sql` 中剔除 `close <= 0` 的行, 全市场零成交休市日, 无效事件以及未引起价格跳变的幽灵拆股记录, 其余保留原样
 - **universe 元数据不完整**:
   - 历史成分来自 `fja05680/sp500` CSV (仅提供日期和代码列表), 映射到当前仍在交易的段时可从 Wikipedia / SEC 补全 `cik`, `name`, `sub_industry`; 早年调出或已切为旧段的成员 `cik` 暂填占位 `'0000000000'`, `sub_industry` 为空
-  - `universe.exchange` 取自 `raw_symbol.listing_exchange`, 仅对最新段填充; `universe.sic` 当前为空, 留给后续用 SEC 数据补齐
+  - `universe.exchange` 取自 `symbol.csv` 的 `listing_exchange`, 仅对最新段填充; `universe.sic` 当前为空, 留给后续用 SEC 数据补齐
 
 ---
 

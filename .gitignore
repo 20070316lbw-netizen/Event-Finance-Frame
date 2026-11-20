@@ -10,5 +10,12 @@ wheels/
 # Virtual environments
 .venv
 .ruff_cache/
-data/
+.pytest_cache/
+
 *.duckdb
+*.duckdb.wal
+data/stocks_csv/dividend.csv
+data/stocks_csv/ohlcv.csv
+data/stocks_csv/split.csv
+data/stocks_csv/symbol.csv
+data/companyfacts.zip
