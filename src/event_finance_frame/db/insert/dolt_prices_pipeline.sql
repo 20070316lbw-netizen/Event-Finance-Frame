@@ -51,12 +51,18 @@ CREATE TABLE IF NOT EXISTS prices (
 );
 
 -- 2. 一次性扫描 ohlcv.csv 清洗并落入临时表: 剔除无效收盘价 + 全市场零成交的休市日
+-- 文件末尾手动 DROP
 CREATE OR REPLACE TEMP TABLE clean_ohlcv AS
 WITH raw_px AS (
     SELECT date, act_symbol, open, high, low, close, volume
     FROM read_csv(
+
+        -- getvariable('stocks_csv_dir')：读取 DuckDB 的环境变量
         getvariable('stocks_csv_dir') || '/ohlcv.csv',
-        header = true,
+        header = true,      -- 第一行是表头
+
+        -- 手动写死每一列的数据类型（日期用 DATE，代码用 VARCHAR，价格用 DOUBLE，成交量用 BIGINT
+        -- 如果不写，DuckDB 会自己抽样猜类型
         columns = {
             'date': 'DATE',
             'act_symbol': 'VARCHAR',
@@ -67,7 +73,7 @@ WITH raw_px AS (
             'volume': 'BIGINT'
         }
     )
-    WHERE close > 0
+    WHERE close > 0     -- 在 SQL 里，NULL > 0 的结果不是真
 ),
 valid_dates AS (
     SELECT date
@@ -77,14 +83,21 @@ valid_dates AS (
 )
 SELECT o.*
 FROM raw_px AS o
+
+-- SEMI JOIN（半连接): 拿右表 v 当一个“白名单”去筛左表 o——只保留日期在白名单里的行，既不会把右表的列拼过来，也不会因为关联导致行数翻倍
+-- USING (date)：当两张表用来关联的列名一模一样时，这是 ON o.date = v.date 的简写
+-- 正常交易日里，有些极冷门的股票当天确实可能 0 成交，但它的收盘价依然有效
+-- 先找 valid_dates 再 SEMI JOIN，就能精准做到“只删假休市日，不误伤冷门股”
 SEMI JOIN valid_dates AS v USING (date);
 
 -- 3. 切段写入 ticker_segment
 DELETE FROM ticker_segment;
 
 INSERT INTO ticker_segment (symbol, ticker, seg_no, start_date, end_date, n_days, gap_before)
+
+-- 给全市场交易日编序号
 WITH cal AS (
-    SELECT date, row_number() OVER (ORDER BY date) AS di
+    SELECT date, row_number() OVER (ORDER BY date) AS di        -- 用 row_number() 给它们编上连续整数 1, 2, 3, ...
     FROM (SELECT DISTINCT date FROM clean_ohlcv)
 ),
 gaps AS (
@@ -92,6 +105,7 @@ gaps AS (
         o.act_symbol,
         o.date,
         c.di - lag(c.di) OVER (PARTITION BY o.act_symbol ORDER BY o.date) AS gap
+
     FROM clean_ohlcv AS o
     JOIN cal AS c USING (date)
 ),

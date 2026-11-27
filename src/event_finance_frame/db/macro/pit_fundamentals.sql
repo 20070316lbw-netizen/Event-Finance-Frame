@@ -1,6 +1,6 @@
 -- Point-in-Time (PIT) 基本面查询表宏
 --
--- 严格遵守 Design.md 时点规则:
+-- 遵守 Design.md 时点规则:
 --   1. universe: 取 snapshot_date <= as_of_date 的最新一期快照, 将 ticker 映射到 cik
 --   2. fundamental_*: 仅可见 filed < as_of_date 的记录 (filed 之后下一个交易日才可见)
 --   3. 财报类型: 仅包含常规季报/年报及其修订版 (10-K, 10-Q, 10-K/A, 10-Q/A)

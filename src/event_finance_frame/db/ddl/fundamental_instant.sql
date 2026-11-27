@@ -1,3 +1,6 @@
+-- 对应会计里的存量（Instant）
+-- instant（时点表）：存资产负债表数据（比如总资产、现金, 这些指标是某一天的快照，没有起始日期
+
 CREATE TABLE IF NOT EXISTS fundamental_instant (
     cik VARCHAR NOT NULL,
     taxonomy VARCHAR NOT NULL,      -- 指标所属分类，例如 us-gaap
