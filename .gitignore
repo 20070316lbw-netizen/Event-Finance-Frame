@@ -19,3 +19,6 @@ data/stocks_csv/ohlcv.csv
 data/stocks_csv/split.csv
 data/stocks_csv/symbol.csv
 data/companyfacts.zip
+
+# Model checkpoints
+*.pt

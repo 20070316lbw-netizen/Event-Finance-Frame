@@ -1,0 +1,29 @@
+# 轻量合成数据冒烟测试配置
+seed: 42
+device: auto
+
+data:
+  source: synthetic
+  n_days: 40
+  n_stocks: 32
+  n_features: 5
+  noise_std: 0.1
+  train_ratio: 0.8
+
+model:
+  name: mlp
+  hidden: [32, 16]
+
+loss:
+  name: pairwise_rank
+  margin: 0.0
+
+optimizer:
+  name: adam
+  lr: 0.01
+  weight_decay: 0.0
+
+train:
+  epochs: 30
+  log_every: 5
+  output_path: checkpoints/mlp_smoke.pt

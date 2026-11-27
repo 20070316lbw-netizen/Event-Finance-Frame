@@ -4,6 +4,9 @@ from pathlib import Path
 
 # /Users/liu/Event-Finance-Frame
 ROOT = Path(__file__).resolve().parents[2]
+CONFIG = ROOT / "config"
+SCRIPTS = ROOT / "scripts"
+CHECKPOINTS = ROOT / "checkpoints"
 SRC = ROOT / "src" / "event_finance_frame"
 DB = ROOT / "src" / "event_finance_frame" / "db"
 DDL = DB / "ddl"

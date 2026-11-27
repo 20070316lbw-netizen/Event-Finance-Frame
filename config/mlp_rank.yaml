@@ -1,0 +1,32 @@
+# 标普500 PIT 横截面排序模型训练配置
+seed: 42
+device: auto
+
+data:
+  source: duckdb
+  db_path: data/lab.duckdb
+  start_date: "2023-01-01"
+  end_date: "2023-12-31"
+  feature_windows: [5, 10, 20, 60]
+  label_horizon: 5
+  label_gap: 1
+  price_col: adj_close
+  train_ratio: 0.8
+
+model:
+  name: mlp
+  hidden: [32, 16]
+
+loss:
+  name: pairwise_rank
+  margin: 0.0
+
+optimizer:
+  name: adam
+  lr: 0.005
+  weight_decay: 0.0001
+
+train:
+  epochs: 20
+  log_every: 5
+  output_path: checkpoints/mlp_rank.pt
