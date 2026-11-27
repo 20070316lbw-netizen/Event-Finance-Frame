@@ -1,0 +1,8 @@
+name: mom_12_1
+description: 经典 12-1 月横截面动量单因子组合 (231 交易日窗口, 跳过最近 21 个交易日)
+combine: raw_weighted
+factors:
+  - name: mom_12_1
+    alias: mom_12_1
+    weight: 1.0
+    params: {}

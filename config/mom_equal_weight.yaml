@@ -1,0 +1,29 @@
+# 标普500 PIT 等权组合回测配置 (因子组合通过 factor_config 独立配置)
+
+data:
+  db_path: data/lab.duckdb
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  price_col: adj_close
+
+strategy:
+  name: factor_equal_weight    # 可选: factor_equal_weight / equal_weight_all
+  factor_config: mom_12_1.yaml # 查找 src/event_finance_frame/factors/configs/ (可改用 mom_blend.yaml 或自定义路径)
+  top_k: 30
+  rebalance_freq: monthly      # 可选: daily / weekly / monthly
+  ascending: false             # false 取因子综合得分最高的 Top-K
+  min_trade_value: 100.0
+  allow_fractional: true
+  cash_buffer: 0.0
+
+broker:
+  commission_rate: 0.0005
+  min_commission: 0.0
+  per_share_commission: 0.0
+  slippage_bps: 5.0
+
+portfolio:
+  initial_cash: 100000.0
+
+output:
+  log_path: logs/mom_equal_weight.txt

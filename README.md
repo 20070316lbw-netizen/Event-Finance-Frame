@@ -18,6 +18,7 @@
 - **市场日历与联结视图**：生成连续自然日表 `market_calendar`（`date`, `weekday`, `is_open`）并与 `prices` 联结为 `prices_calendar` 视图。
 - **交易日历与单调时钟（M2）**：`TradingCalendar` 与 `Clock` 支持从 DuckDB 构建交易日序列、按交易日步进 `step()`、按策略跳转 `seek()`（默认禁止时间倒退）以及区间迭代。
 - **PIT 时点隔离视图（M3）**：`PITDataView` 绑定到 `Clock`，统一暴露截至 `clock.now` 的成分快照、行情面板、最新截面行情、PIT 基本面（含修订去重）与历史收益率，杜绝未来数据与标签宏泄漏。
+- **回测撮合与组合记账（M4）**：`Broker`、`Portfolio` 与 `BacktestEngine` 串联完整日频回测闭环，支持收盘价撮合、比例/每股/最低手续费与滑点、先卖后买原子调仓、加权成本与每日盯市净值流水。
 
 ## 数据库核心对象（`data/lab.duckdb`）
 
@@ -64,5 +65,5 @@ uv run pytest -v
 - [x] **M1**：全量数据管道（Dolt CSV 行情 → 市场日历 → 标普 500 历史成分 → SEC 基本面与 PIT 表宏）
 - [x] **M2**：Calendar 与 Clock 时间推进器
 - [x] **M3**：PIT DataView（防未来数据隔离层）
-- [ ] **M4**：Broker 与 Portfolio（收盘价撮合、手续费、滑点、持仓记账）
+- [x] **M4**：Broker 与 Portfolio（收盘价撮合、手续费、滑点、持仓记账）
 - [ ] **M5**：示例策略、绩效报告与银行业扩展数据源

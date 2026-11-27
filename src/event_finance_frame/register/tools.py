@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import inspect
-from collections.abc import Callable
-from dataclasses import dataclass
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, field
 from functools import wraps
 from typing import Any, ParamSpec, TypeVar
 
@@ -31,6 +31,7 @@ class MethodSpec:
     description: str = ""
     group: str = "default"
     validator: Validator | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 REGISTRY: dict[str, MethodSpec] = {}
@@ -60,15 +61,17 @@ def register(
     group: str = "default",
     validator: Validator | None = validate_panel_index,
     data_arg: int | str = 0,
+    metadata: Mapping[str, Any] | None = None,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """将函数登记到全局注册表, 并在调用前自动执行数据校验
 
     Args:
         name: 注册名称, 默认使用函数名 func.__name__
         description: 方法说明
-        group: 命名空间分组 (如 "functional", "data", "backtest")
+        group: 命名空间分组 (如 "functional", "data", "backtest", "factors")
         validator: 前置校验器, 默认校验 (date, ticker) MultiIndex; 传 None 跳过校验
         data_arg: 待校验参数的位置索引或参数名, 默认为第 0 个参数
+        metadata: 附加元信息 (如因子依赖的数据源与回看窗口)
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -101,6 +104,7 @@ def register(
             description=resolved_description,
             group=group,
             validator=validator,
+            metadata=dict(metadata or {}),
         )
         return wrapped
 

@@ -22,3 +22,6 @@ data/companyfacts.zip
 
 # Model checkpoints
 *.pt
+
+# Backtest logs
+logs/

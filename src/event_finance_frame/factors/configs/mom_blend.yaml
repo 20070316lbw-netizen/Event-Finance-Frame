@@ -1,0 +1,18 @@
+name: mom_blend
+description: 复合动量因子组合 (长/中/短多期限动量按当日横截面 Z-score 加权合成)
+combine: zscore_weighted
+factors:
+  - name: mom_12_1
+    alias: mom_12_1
+    weight: 0.5
+    params: {}
+  - name: mom_6_1
+    alias: mom_6_1
+    weight: 0.3
+    params: {}
+  - name: mom_base
+    alias: mom_20_5
+    weight: 0.2
+    params:
+      window: 20
+      skip: 5

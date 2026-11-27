@@ -6,10 +6,13 @@ from enum import StrEnum
 
 __all__ = [
     "BaseErrorCode",
+    "BrokerErrorCode",
     "ClockErrorCode",
     "DatabaseErrorCode",
     "EventFinanceError",
+    "FactorErrorCode",
     "PITErrorCode",
+    "PortfolioErrorCode",
     "RegistryErrorCode",
     "SourcesErrorCode",
     "ValidationErrorCode",
@@ -23,6 +26,29 @@ class SourcesErrorCode(BaseErrorCode): ...
 
 
 class DatabaseErrorCode(BaseErrorCode): ...
+
+
+class FactorErrorCode(BaseErrorCode):
+    INVALID_ARGUMENT = "FAC_INVALID_ARGUMENT"
+    INVALID_CONFIG = "FAC_INVALID_CONFIG"
+    MISSING_COLUMN = "FAC_MISSING_COLUMN"
+    UNSUPPORTED_SOURCE = "FAC_UNSUPPORTED_SOURCE"
+
+
+class BrokerErrorCode(BaseErrorCode):
+    INVALID_CONFIG = "BRK_INVALID_CONFIG"
+    INVALID_ORDER = "BRK_INVALID_ORDER"
+    MISSING_PRICE = "BRK_MISSING_PRICE"
+    INSUFFICIENT_CASH = "BRK_INSUFFICIENT_CASH"
+    INSUFFICIENT_POSITION = "BRK_INSUFFICIENT_POSITION"
+
+
+class PortfolioErrorCode(BaseErrorCode):
+    INVALID_CASH = "PRT_INVALID_CASH"
+    INVALID_FILL = "PRT_INVALID_FILL"
+    INSUFFICIENT_CASH = "PRT_INSUFFICIENT_CASH"
+    INSUFFICIENT_POSITION = "PRT_INSUFFICIENT_POSITION"
+    MISSING_PRICE = "PRT_MISSING_PRICE"
 
 
 class ClockErrorCode(BaseErrorCode):
