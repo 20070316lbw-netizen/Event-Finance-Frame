@@ -6,8 +6,10 @@ from enum import StrEnum
 
 __all__ = [
     "BaseErrorCode",
+    "ClockErrorCode",
     "DatabaseErrorCode",
     "EventFinanceError",
+    "PITErrorCode",
     "RegistryErrorCode",
     "SourcesErrorCode",
     "ValidationErrorCode",
@@ -21,6 +23,20 @@ class SourcesErrorCode(BaseErrorCode): ...
 
 
 class DatabaseErrorCode(BaseErrorCode): ...
+
+
+class ClockErrorCode(BaseErrorCode):
+    EMPTY_CALENDAR = "CLK_EMPTY_CALENDAR"
+    INVALID_DATE_RANGE = "CLK_INVALID_DATE_RANGE"
+    INVALID_STEP = "CLK_INVALID_STEP"
+    NON_TRADING_DAY = "CLK_NON_TRADING_DAY"
+    OUT_OF_RANGE = "CLK_OUT_OF_RANGE"
+    BACKWARD_SEEK = "CLK_BACKWARD_SEEK"
+
+
+class PITErrorCode(BaseErrorCode):
+    INVALID_ARGUMENT = "PIT_INVALID_ARGUMENT"
+    FUTURE_ACCESS_DENIED = "PIT_FUTURE_ACCESS_DENIED"
 
 
 class RegistryErrorCode(BaseErrorCode):

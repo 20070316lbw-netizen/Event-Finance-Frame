@@ -16,6 +16,8 @@
 - **单 SQL 一体化 Dolt CSV 管道**：直接读取 Dolt 导出的 `data/stocks_csv/*.csv` 写入 `lab.duckdb`（无需中间库），一次完成坏价过滤、全市场零成交休市日剔除、代码复用切段（`{symbol}~{YYYYMMDD}`）、幽灵重复拆股校验与全收益复权。
 - **DuckDB PIT 表宏**：内置 `pit_fundamentals(as_of_date, n_reports := 5)` 与 `pit_fundamentals_by_ticker(target_ticker, as_of_date, n_reports := 5)`，毫秒级获取任意截止日可见的最近 $N$ 期常规财报（`10-K`/`10-Q` 及其修订版）。
 - **市场日历与联结视图**：生成连续自然日表 `market_calendar`（`date`, `weekday`, `is_open`）并与 `prices` 联结为 `prices_calendar` 视图。
+- **交易日历与单调时钟（M2）**：`TradingCalendar` 与 `Clock` 支持从 DuckDB 构建交易日序列、按交易日步进 `step()`、按策略跳转 `seek()`（默认禁止时间倒退）以及区间迭代。
+- **PIT 时点隔离视图（M3）**：`PITDataView` 绑定到 `Clock`，统一暴露截至 `clock.now` 的成分快照、行情面板、最新截面行情、PIT 基本面（含修订去重）与历史收益率，杜绝未来数据与标签宏泄漏。
 
 ## 数据库核心对象（`data/lab.duckdb`）
 
@@ -60,7 +62,7 @@ uv run pytest -v
 
 - [x] **M0**：DDL 规范、数据源字段与项目基础框架
 - [x] **M1**：全量数据管道（Dolt CSV 行情 → 市场日历 → 标普 500 历史成分 → SEC 基本面与 PIT 表宏）
-- [ ] **M2**：Calendar 与 Clock 时间推进器
-- [ ] **M3**：PIT DataView（防未来数据隔离层）
+- [x] **M2**：Calendar 与 Clock 时间推进器
+- [x] **M3**：PIT DataView（防未来数据隔离层）
 - [ ] **M4**：Broker 与 Portfolio（收盘价撮合、手续费、滑点、持仓记账）
 - [ ] **M5**：示例策略、绩效报告与银行业扩展数据源
